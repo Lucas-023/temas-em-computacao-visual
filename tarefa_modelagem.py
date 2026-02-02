@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-# 1. Sua função in_circle (Intacta, apenas ajustei os parametros para passar o centro)
 def in_circle(point, circle_center, radius):
     dx = point[0] - circle_center[0]
     dy = point[1] - circle_center[1]
@@ -15,12 +14,10 @@ def in_circle(point, circle_center, radius):
     else:
         return distance_squared, 'outside'
 
-# 2. Sua função classify (Ajustada o ESSENCIAL)
 def classify(xmin, xmax, ymin, ymax, circle_center, radius):
     cx, cy = circle_center
     
-    # --- 1. Verifica se está TOTALMENTE FORA ---
-    # (Mantemos a lógica anterior do ponto mais próximo)
+    #Verifica se está TOTALMENTE FORA
     closest_x = max(xmin, min(cx, xmax))
     closest_y = max(ymin, min(cy, ymax))
     
@@ -28,22 +25,18 @@ def classify(xmin, xmax, ymin, ymax, circle_center, radius):
     if status_min == 'outside':
         return 1 # Totalmente Fora
 
-    # --- 2. Verifica se está TOTALMENTE DENTRO (Sua Otimização) ---
-    # Descobrimos qual X e qual Y estão mais longe do centro
-    # Usamos abs() para ver qual distância é maior
+    #Verifica se está TOTALMENTE DENTRO (Sua Otimização)
     farthest_x = xmin if abs(xmin - cx) > abs(xmax - cx) else xmax
     farthest_y = ymin if abs(ymin - cy) > abs(ymax - cy) else ymax
     
-    # Testamos APENAS esse ponto
     _, status_max = in_circle([farthest_x, farthest_y], circle_center, radius)
     
     if status_max == 'inside':
-        return -1 # Totalmente Dentro
+        return -1 
 
     # --- 3. Caso Misto ---
     return 0
 
-# 3. Sua função explore (Corrigido o erro de retorno da lista)
 def explore(xmin, xmax, ymin, ymax, level, circle_center, radius):
     c = classify(xmin, xmax, ymin, ymax, circle_center, radius)
     
@@ -55,7 +48,6 @@ def explore(xmin, xmax, ymin, ymax, level, circle_center, radius):
         xmid = (xmin + xmax) / 2
         ymid = (ymin + ymax) / 2
         
-        # O ERRO ESTAVA AQUI: Você precisa somar as listas retornadas!
         resultado = []
         resultado += explore(xmin, xmid, ymin, ymid, level - 1, circle_center, radius)
         resultado += explore(xmid, xmax, ymin, ymid, level - 1, circle_center, radius)
@@ -63,17 +55,15 @@ def explore(xmin, xmax, ymin, ymax, level, circle_center, radius):
         resultado += explore(xmid, xmax, ymid, ymax, level - 1, circle_center, radius)
         return resultado
 
-# --- 4. Parte da Visualização ---
 
 # Configurações iniciais
 centro = [0.3, 0.4]
 raio = 0.21
 nivel = 6
 
-# Roda o seu código
 quadrados = explore(0, 1, 0, 1, nivel, centro, raio)
 
-# Plota o resultado
+# Plot do resultado
 fig, ax = plt.subplots(figsize=(6, 6))
 
 for xmin, xmax, ymin, ymax, tipo in quadrados:
