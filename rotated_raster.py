@@ -8,22 +8,17 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 def rotate_point(x, y, cx, cy, angle_rad):
-    """
-    Rotaciona o ponto (x,y) em torno de (cx, cy) pelo angulo INVERSO.
-    Isso cria o efeito da imagem girando na direção desejada.
-    """
+    
     # 1. Transladar para a origem relativa ao pivô
     tx = x - cx
     ty = y - cy
     
     # 2. Rotação Inversa (-angle)
-    # cos(-t) = cos(t)
-    # sin(-t) = -sin(t)
+    
     cos_a = math.cos(angle_rad)
     sin_a = math.sin(angle_rad)
     
     # Fórmula da rotação:
-    # x' = x cos(t) - y sin(t)  (mas como é inverso, o sinal do sin muda)
     rx = tx * cos_a + ty * sin_a
     ry = -tx * sin_a + ty * cos_a
     
@@ -57,14 +52,9 @@ def main(args):
         px = x_coords[i]
         py = y_coords[j]
         
-        # --- A MÁGICA ACONTECE AQUI ---
-        # Transformamos a coordenada do pixel para o "Espaço do Objeto"
         # Giramos o ponto ao contrário para ver onde ele cai na cena original estática
         px_rotated, py_rotated = rotate_point(px, py, cx, cy, angle_rad)
         query_point = (px_rotated, py_rotated)
-
-        # Define cor de fundo padrão
-        # (Nota: Se a classe Color tiver método as_list, usamos ele, senão array direto)
         bg = scene.background
         if hasattr(bg, 'as_list'):
              image[j, i] = bg.as_list()
