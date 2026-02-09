@@ -32,16 +32,13 @@ def main(args):
     plt.imsave(args.output, image, vmin=0, vmax=1, origin='lower')
     print(f"Imagem salva: {args.output}")
 
-    # 4. ZOOM PARA ÁREAS INTERESSANTES DO MANDELBROT
-    # Área interessante 1: Região do "Sea-horse valley" (vale do cavalo-marinho)
-    # Coordenadas aproximadas: x=-0.75, y=0.1
     if args.zoom:
         zoom_configs = [
             # (centro_x, centro_y, largura_janela, nome)
-            (-0.75, 0.1, 0.05, "seahorse_valley"),  # Vale do cavalo-marinho
-            (-0.5, 0.0, 0.1, "main_body"),           # Corpo principal
-            (0.285, 0.01, 0.02, "spiral"),           # Região espiral
-            (-0.7463, 0.1102, 0.005, "detail"),      # Detalhe fino
+            (-0.75, 0.1, 0.05, "seahorse_valley"),  
+            (-0.5, 0.0, 0.1, "main_body"),           
+            (0.285, 0.01, 0.02, "spiral"),           
+            (-0.7463, 0.1102, 0.005, "detail"),     
         ]
         
         for target_x, target_y, zoom_range, zoom_name in zoom_configs:
@@ -68,8 +65,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Renderizador do Fractal de Mandelbrot')
     parser.add_argument('-s', '--scene', type=str, default='mandelbrot_scene',
                        help='Módulo da cena a ser renderizada')
-    # Janela padrão para visualizar o conjunto de Mandelbrot completo
-    # O conjunto está aproximadamente entre -2.5 < x < 1.0 e -1.25 < y < 1.25
     parser.add_argument('-w', '--window', type=float, nargs=4, default=[-2.5, 1.0, -1.25, 1.25],
                        help='Janela de visualização [xmin, xmax, ymin, ymax]')
     parser.add_argument('--zoom', action='store_true',
